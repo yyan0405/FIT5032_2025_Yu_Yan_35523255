@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f3e5f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e1bee7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" fill="url(#bg2)"/>
+  
+  <!-- Brain outline -->
+  <path d="M120 60 Q100 50 90 70 Q85 90 95 110 Q110 120 130 115 Q150 120 170 115 Q190 120 205 110 Q215 90 210 70 Q200 50 180 60 Q150 55 120 60 Z" 
+        fill="#9c27b0" opacity="0.3"/>
+  
+  <!-- Brain details -->
+  <path d="M130 70 Q140 65 150 70 Q160 75 170 70" stroke="#7b1fa2" stroke-width="2" fill="none"/>
+  <path d="M125 85 Q135 80 145 85 Q155 90 165 85" stroke="#7b1fa2" stroke-width="2" fill="none"/>
+  <path d="M130 100 Q140 95 150 100 Q160 105 170 100" stroke="#7b1fa2" stroke-width="2" fill="none"/>
+  
+  <!-- Two people silhouettes -->
+  <circle cx="80" cy="140" r="15" fill="#673ab7"/>
+  <rect x="70" y="155" width="20" height="30" fill="#673ab7" rx="10"/>
+  
+  <circle cx="220" cy="140" r="15" fill="#3f51b5"/>
+  <rect x="210" y="155" width="20" height="30" fill="#3f51b5" rx="10"/>
+  
+  <!-- Speech bubbles -->
+  <ellipse cx="110" cy="120" rx="25" ry="15" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+  <path d="M95 130 L85 145 L105 135 Z" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+  
+  <ellipse cx="190" cy="120" rx="25" ry="15" fill="#fff" stroke="#3f51b5" stroke-width="2"/>
+  <path d="M205 130 L215 145 L195 135 Z" fill="#fff" stroke="#3f51b5" stroke-width="2"/>
+  
+  <!-- Hearts in speech bubbles -->
+  <path d="M105 115 Q107 112 110 115 Q113 112 115 115 Q113 120 110 122 Q107 120 105 115" fill="#e91e63"/>
+  <path d="M185 115 Q187 112 190 115 Q193 112 195 115 Q193 120 190 122 Q187 120 185 115" fill="#e91e63"/>
+  
+  <!-- Title -->
+  <text x="150" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#7b1fa2">Mental Health Counseling</text>
+</svg>

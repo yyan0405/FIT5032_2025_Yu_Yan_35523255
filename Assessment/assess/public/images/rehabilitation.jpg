@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
+  <defs>
+    <linearGradient id="bg6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e3f2fd;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#bbdefb;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" fill="url(#bg6)"/>
+  
+  <!-- Exercise mat -->
+  <rect x="80" y="140" width="140" height="40" fill="#4caf50" rx="5" opacity="0.7"/>
+  
+  <!-- Patient doing exercise -->
+  <circle cx="150" cy="120" r="12" fill="#ffb74d"/>
+  <rect x="142" y="132" width="16" height="25" fill="#2196f3" rx="8"/>
+  
+  <!-- Arms in exercise position -->
+  <rect x="130" y="135" width="12" height="4" fill="#ffb74d" rx="2" transform="rotate(-30 136 137)"/>
+  <rect x="158" y="135" width="12" height="4" fill="#ffb74d" rx="2" transform="rotate(30 164 137)"/>
+  
+  <!-- Legs -->
+  <rect x="145" y="157" width="4" height="15" fill="#ffb74d"/>
+  <rect x="151" y="157" width="4" height="15" fill="#ffb74d"/>
+  
+  <!-- Physical therapist -->
+  <circle cx="60" cy="100" r="12" fill="#ffb74d"/>
+  <rect x="52" y="112" width="16" height="25" fill="#fff" rx="8"/>
+  <rect x="48" y="120" width="8" height="15" fill="#ffb74d"/>
+  <rect x="64" y="120" width="8" height="15" fill="#ffb74d"/>
+  
+  <!-- Therapist's clipboard -->
+  <rect x="25" y="110" width="20" height="25" fill="#fff" stroke="#666" stroke-width="2" rx="2"/>
+  <rect x="32" y="107" width="6" height="3" fill="#666" rx="1"/>
+  
+  <!-- Exercise equipment -->
+  <!-- Dumbbells -->
+  <rect x="200" y="160" width="20" height="4" fill="#666" rx="2"/>
+  <circle cx="200" cy="162" r="6" fill="#333"/>
+  <circle cx="220" cy="162" r="6" fill="#333"/>
+  
+  <!-- Exercise ball -->
+  <circle cx="240" cy="150" r="20" fill="#ff9800" opacity="0.8"/>
+  <circle cx="240" cy="150" r="20" fill="none" stroke="#f57c00" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Resistance band -->
+  <path d="M100 80 Q120 70 140 80 Q160 90 180 80" stroke="#e91e63" stroke-width="6" fill="none"/>
+  <circle cx="100" cy="80" r="4" fill="#ad1457"/>
+  <circle cx="180" cy="80" r="4" fill="#ad1457"/>
+  
+  <!-- Progress chart on wall -->
+  <rect x="20" y="40" width="60" height="40" fill="#fff" stroke="#333" stroke-width="2" rx="3"/>
+  <line x1="25" y1="75" x2="75" y2="75" stroke="#333" stroke-width="1"/>
+  <line x1="25" y1="75" x2="25" y2="45" stroke="#333" stroke-width="1"/>
+  
+  <!-- Progress bars -->
+  <rect x="30" y="65" width="8" height="10" fill="#4caf50"/>
+  <rect x="40" y="60" width="8" height="15" fill="#2196f3"/>
+  <rect x="50" y="55" width="8" height="20" fill="#ff9800"/>
+  <rect x="60" y="50" width="8" height="25" fill="#9c27b0"/>
+  
+  <!-- Motivational symbols -->
+  <text x="270" y="40" font-family="Arial, sans-serif" font-size="20" fill="#4caf50">💪</text>
+  <text x="250" y="70" font-family="Arial, sans-serif" font-size="18" fill="#2196f3">🏃</text>
+  <text x="30" y="180" font-family="Arial, sans-serif" font-size="16" fill="#ff9800">⭐</text>
+  
+  <!-- Title -->
+  <text x="150" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1976d2">Rehabilitation Training</text>
+</svg>

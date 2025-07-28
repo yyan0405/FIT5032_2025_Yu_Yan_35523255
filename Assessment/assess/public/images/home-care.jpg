@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f5e8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c8e6c9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" fill="url(#bg4)"/>
+  
+  <!-- House outline -->
+  <path d="M80 120 L80 170 L220 170 L220 120 L150 80 Z" fill="#fff" stroke="#4caf50" stroke-width="3"/>
+  
+  <!-- Roof -->
+  <path d="M70 120 L150 70 L230 120 Z" fill="#8bc34a"/>
+  
+  <!-- Door -->
+  <rect x="135" y="140" width="30" height="30" fill="#795548" rx="2"/>
+  <circle cx="160" cy="155" r="2" fill="#ffeb3b"/>
+  
+  <!-- Windows -->
+  <rect x="100" y="130" width="20" height="20" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+  <line x1="110" y1="130" x2="110" y2="150" stroke="#2196f3" stroke-width="1"/>
+  <line x1="100" y1="140" x2="120" y2="140" stroke="#2196f3" stroke-width="1"/>
+  
+  <rect x="180" y="130" width="20" height="20" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+  <line x1="190" y1="130" x2="190" y2="150" stroke="#2196f3" stroke-width="1"/>
+  <line x1="180" y1="140" x2="200" y2="140" stroke="#2196f3" stroke-width="1"/>
+  
+  <!-- Nurse figure -->
+  <circle cx="60" cy="130" r="12" fill="#ffb74d"/>
+  <rect x="52" y="142" width="16" height="25" fill="#fff" rx="8"/>
+  <rect x="48" y="150" width="8" height="15" fill="#ffb74d"/>
+  <rect x="64" y="150" width="8" height="15" fill="#ffb74d"/>
+  
+  <!-- Nurse cap -->
+  <ellipse cx="60" cy="125" rx="15" ry="5" fill="#fff"/>
+  <rect x="58" y="122" width="4" height="6" fill="#f44336"/>
+  
+  <!-- Medical bag -->
+  <rect x="25" y="155" width="20" height="12" fill="#f44336" rx="2"/>
+  <rect x="32" y="152" width="6" height="6" fill="#fff"/>
+  <rect x="30" y="154" width="10" height="2" fill="#fff"/>
+  
+  <!-- Patient in window -->
+  <circle cx="110" cy="135" r="6" fill="#ffb74d"/>
+  
+  <!-- Heart symbol above house -->
+  <path d="M140 95 Q145 90 150 95 Q155 90 160 95 Q155 105 150 110 Q145 105 140 95" fill="#e91e63"/>
+  
+  <!-- Care symbols -->
+  <text x="240" y="60" font-family="Arial, sans-serif" font-size="24" fill="#4caf50">🏠</text>
+  <text x="30" y="100" font-family="Arial, sans-serif" font-size="20" fill="#2196f3">💊</text>
+  <text x="260" y="140" font-family="Arial, sans-serif" font-size="18" fill="#ff9800">🩺</text>
+  
+  <!-- Title -->
+  <text x="150" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#388e3c">Home Care Services</text>
+</svg>
