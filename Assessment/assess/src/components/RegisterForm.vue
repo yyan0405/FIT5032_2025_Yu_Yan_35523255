@@ -6,7 +6,7 @@
         <p>Join Health Care Charity Organization to care for vulnerable groups together</p>
       </div>
 
-      <form @submit.prevent="handleRegister" class="register-form-content">
+      <form @submit.prevent="handleRegister" class="register-form-content" novalidate>
         <!-- Username input -->
         <div class="form-group">
           <label for="username">Username *</label>
@@ -18,7 +18,6 @@
             :class="{ 'error': errors.username, 'success': validFields.username }"
             @blur="validateField('username')"
             @input="handleInput('username')"
-            required
           />
           <span v-if="errors.username" class="error-message">{{ errors.username }}</span>
           <span v-else-if="validFields.username" class="success-message">✓ Username available</span>
@@ -35,7 +34,6 @@
             :class="{ 'error': errors.email, 'success': validFields.email }"
             @blur="validateField('email')"
             @input="handleInput('email')"
-            required
           />
           <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
           <span v-else-if="validFields.email" class="success-message">✓ Email format correct</span>
@@ -53,7 +51,6 @@
             @blur="validateField('phone')"
             @input="handleInput('phone')"
             maxlength="11"
-            required
           />
           <span v-if="errors.phone" class="error-message">{{ errors.phone }}</span>
           <span v-else-if="validFields.phone" class="success-message">✓ Phone number format correct</span>
@@ -71,7 +68,6 @@
               :class="{ 'error': errors.password, 'success': validFields.password }"
               @blur="validateField('password')"
               @input="handleInput('password')"
-              required
             />
             <button
               type="button"
@@ -107,7 +103,6 @@
               :class="{ 'error': errors.confirmPassword, 'success': validFields.confirmPassword }"
               @blur="validateField('confirmPassword')"
               @input="handleInput('confirmPassword')"
-              required
             />
             <button
               type="button"
@@ -163,7 +158,6 @@
               v-model="formData.agreeTerms"
               type="checkbox"
               class="checkbox"
-              required
             />
             <span class="checkmark"></span>
             I have read and agree to
@@ -338,7 +332,7 @@ const validateField = (field) => {
   switch (field) {
     case 'username':
       if (!value) {
-        errors.username = 'Please enter username'
+        errors.username = 'Username should not be empty'
         validFields.username = false
       } else if (!validateUsername(value)) {
         errors.username = 'Username format incorrect (3-20 characters, can only contain letters, numbers, underscores and Chinese characters)'
@@ -351,7 +345,7 @@ const validateField = (field) => {
       
     case 'email':
       if (!value) {
-        errors.email = 'Please enter email address'
+        errors.email = 'Email should not be empty'
         validFields.email = false
       } else if (!validateEmail(value)) {
         errors.email = 'Please enter a valid email address'
@@ -364,7 +358,7 @@ const validateField = (field) => {
       
     case 'phone':
       if (!value) {
-        errors.phone = 'Please enter phone number'
+        errors.phone = 'Phone number should not be empty'
         validFields.phone = false
       } else if (!validatePhone(value)) {
         errors.phone = 'Please enter a valid 11-digit phone number'
@@ -377,27 +371,30 @@ const validateField = (field) => {
       
     case 'password':
       if (!value) {
-        errors.password = 'Please enter password'
-        validFields.password = false
-      } else if (!validatePassword(value)) {
-        errors.password = 'Password must be at least 8 characters, including letters and numbers'
+        errors.password = 'Password should not be empty'
         validFields.password = false
       } else {
-        errors.password = ''
-        validFields.password = true
-        // Re-validate confirm password
-        if (formData.confirmPassword) {
-          validateField('confirmPassword')
+        const passwordValidation = validatePassword(value)
+        if (!passwordValidation.isValid) {
+          errors.password = passwordValidation.errors.join(', ')
+          validFields.password = false
+        } else {
+          errors.password = ''
+          validFields.password = true
+          // Re-validate confirm password
+          if (formData.confirmPassword) {
+            validateField('confirmPassword')
+          }
         }
       }
       break
       
     case 'confirmPassword':
       if (!value) {
-        errors.confirmPassword = 'Please confirm password'
+        errors.confirmPassword = 'Confirm password should not be empty'
         validFields.confirmPassword = false
       } else if (value !== formData.password) {
-        errors.confirmPassword = 'The two passwords entered are inconsistent'
+        errors.confirmPassword = 'The two passwords do not match'
         validFields.confirmPassword = false
       } else {
         errors.confirmPassword = ''

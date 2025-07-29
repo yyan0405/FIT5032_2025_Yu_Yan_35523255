@@ -6,8 +6,24 @@
  * @returns {boolean} - Validation result
  */
 export const validateEmail = (email) => {
+  const result = {
+    isValid: true,
+    errors: []
+  }
+
+  if (!email) {
+    result.isValid = false
+    result.errors.push('Email is required')
+    return result
+  }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email)
+  if (!emailRegex.test(email)) {
+    result.isValid = false
+    result.errors.push('Please enter a valid email address')
+  }
+
+  return result
 }
 
 /**
@@ -65,12 +81,12 @@ export const validateUsername = (username) => {
     result.errors.push('Username must be at least 3 characters long')
   }
 
-  if (username.length > 20) {
+  if (username && username.length > 20) {
     result.isValid = false
     result.errors.push('Username cannot exceed 20 characters')
   }
 
-  if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+  if (username && !/^[a-zA-Z0-9_]+$/.test(username)) {
     result.isValid = false
     result.errors.push('Username can only contain letters, numbers and underscores')
   }
@@ -248,7 +264,7 @@ export const validateForm = (formData, rules) => {
 
     // Check required fields
     if (required && (!value || value.toString().trim() === '')) {
-      errors[field] = 'This field is required'
+      errors[field] = 'This field should not be empty'
       isValid = false
       return
     }

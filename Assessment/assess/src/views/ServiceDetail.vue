@@ -119,88 +119,88 @@ export default {
         const serviceId = parseInt(route.params.id)
         await new Promise(resolve => setTimeout(resolve, 800))
         
-        // 模拟服务详情数据
+        // Mock service detail data
         const services = {
           1: {
             id: 1,
-            title: '免费健康检查',
-            category: '预防保健',
+            title: 'Free Health Checkup',
+            category: 'Preventive Care',
             rating: 4.8,
             reviewCount: 156,
-            description: '为弱势群体提供全面的免费健康检查服务，包括基础体检、血液检查、心电图等项目。',
-            imageUrl: 'https://via.placeholder.com/400x300.png?text=健康检查',
+            description: 'Comprehensive free health checkup services for vulnerable groups, including basic physical examination, blood tests, ECG and other items.',
+            imageUrl: '/images/health-checkup.jpg',
             details: [
-              '全面身体检查',
-              '血液生化检查',
-              '心电图检查',
-              '胸部X光检查',
-              '专业医生咨询',
-              '健康报告解读'
+              'Comprehensive physical examination',
+              'Blood biochemistry tests',
+              'Electrocardiogram (ECG)',
+              'Chest X-ray examination',
+              'Professional doctor consultation',
+              'Health report interpretation'
             ],
-            schedule: '周一至周五 8:00-17:00，周六 8:00-12:00',
+            schedule: 'Monday to Friday 8:00-17:00, Saturday 8:00-12:00',
             contact: {
               phone: '400-123-4567',
-              address: '北京市朝阳区健康大街123号'
+              address: '123 Health Street, Chaoyang District, Beijing'
             }
           },
           2: {
             id: 2,
-            title: '心理健康咨询',
-            category: '心理支持',
+            title: 'Mental Health Counseling',
+            category: 'Mental Health Support',
             rating: 4.9,
             reviewCount: 89,
-            description: '专业心理咨询师提供免费心理健康支持，帮助缓解心理压力，改善心理状态。',
-            imageUrl: 'https://via.placeholder.com/400x300.png?text=心理咨询',
+            description: 'Professional counselors provide free mental health support to help alleviate psychological stress and improve mental state.',
+            imageUrl: '/images/psychological-counseling.jpg',
             details: [
-              '一对一心理咨询',
-              '团体心理治疗',
-              '心理健康评估',
-              '情绪管理指导',
-              '压力缓解技巧',
-              '心理危机干预'
+              'One-on-one psychological counseling',
+              'Group psychotherapy',
+              'Mental health assessment',
+              'Emotional management guidance',
+              'Stress relief techniques',
+              'Psychological crisis intervention'
             ],
-            schedule: '周一至周日 9:00-21:00（需预约）',
+            schedule: 'Monday to Sunday 9:00-21:00 (Appointment required)',
             contact: {
               phone: '400-123-4568',
-              address: '北京市朝阳区心理健康中心'
+              address: 'Mental Health Center, Chaoyang District, Beijing'
             }
           }
-          // 可以添加更多服务详情
+          // More service details can be added
         }
         
         service.value = services[serviceId] || null
         if (!service.value) {
-          error.value = '服务不存在'
+          error.value = 'Service not found'
           return
         }
         
-        // 模拟评价数据
+        // Mock review data
         reviews.value = [
           {
             id: 1,
-            username: '张女士',
+            username: 'Ms. Zhang',
             rating: 5,
-            comment: '服务非常好，医生很专业，检查很仔细，强烈推荐！',
+            comment: 'Excellent service! The doctors are very professional and thorough in their examinations. Highly recommended!',
             date: new Date('2024-12-01')
           },
           {
             id: 2,
-            username: '李先生',
+            username: 'Mr. Li',
             rating: 4,
-            comment: '整体不错，就是等待时间稍长，但服务质量很好。',
+            comment: 'Overall very good, just a bit of waiting time, but the service quality is excellent.',
             date: new Date('2024-11-28')
           },
           {
             id: 3,
-            username: '王女士',
+            username: 'Ms. Wang',
             rating: 5,
-            comment: '免费的服务能做到这个水平真的很不错，感谢机构的帮助！',
+            comment: 'Amazing that free services can reach this level of quality. Thank you for the help!',
             date: new Date('2024-11-25')
           }
         ]
         
       } catch (err) {
-        error.value = '无法加载服务详情，请稍后再试。'
+        error.value = 'Unable to load service details, please try again later.'
       } finally {
         loading.value = false
       }
@@ -208,19 +208,19 @@ export default {
 
     const submitReview = async () => {
       if (!newReview.value.rating || !newReview.value.comment.trim()) {
-        alert('请填写完整的评价信息')
+        alert('Please fill in complete review information')
         return
       }
       
       submittingReview.value = true
       
       try {
-        // 模拟提交评价
+        // Mock review submission
         await new Promise(resolve => setTimeout(resolve, 1000))
         
         const review = {
           id: reviews.value.length + 1,
-          username: authStore.currentUser?.username || '匿名用户',
+          username: authStore.currentUser?.username || 'Anonymous User',
           rating: parseInt(newReview.value.rating),
           comment: newReview.value.comment.trim(),
           date: new Date()
@@ -228,18 +228,18 @@ export default {
         
         reviews.value.unshift(review)
         
-        // 重新计算平均评分
+        // Recalculate average rating
         const totalRating = reviews.value.reduce((sum, r) => sum + r.rating, 0)
         service.value.rating = (totalRating / reviews.value.length).toFixed(1)
         service.value.reviewCount = reviews.value.length
         
-        // 重置表单
+        // Reset form
         newReview.value = { rating: '', comment: '' }
         
-        alert('评价提交成功！')
+        alert('Review submitted successfully!')
         
       } catch (err) {
-        alert('评价提交失败，请稍后再试')
+        alert('Review submission failed, please try again later')
       } finally {
         submittingReview.value = false
       }

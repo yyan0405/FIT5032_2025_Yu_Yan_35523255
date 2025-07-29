@@ -174,12 +174,14 @@ export const useAuthStore = defineStore('auth', {
         const { username, email, phone, password, age, idCard } = userData
         
         // Input validation
-        if (!validateUsername(username)) {
-          throw new Error('Username format is incorrect')
+        const usernameValidation = validateUsername(username)
+        if (!usernameValidation.isValid) {
+          throw new Error(usernameValidation.errors.join(', '))
         }
         
-        if (!validateEmail(email)) {
-          throw new Error('Email format is incorrect')
+        const emailValidation = validateEmail(email)
+        if (!emailValidation.isValid) {
+          throw new Error(emailValidation.errors.join(', '))
         }
         
         // Check if username and email already exist

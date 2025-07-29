@@ -1,18 +1,23 @@
 <template>
   <div class="register-container">
     <h2>Register</h2>
-    <form @submit.prevent="handleRegister" class="register-form">
+    <form @submit.prevent="handleRegister" class="register-form" novalidate>
       <div class="form-group">
         <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required>
+        <input type="text" id="username" v-model="username">
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" v-model="email">
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required>
+        <input type="password" id="password" v-model="password">
+        <p v-if="passwordError" class="error-message">{{ passwordError }}</p>
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" required>
+        <input type="password" id="confirmPassword" v-model="confirmPassword">
       </div>
       <button type="submit" class="register-button">Register</button>
       <p v-if="error" class="error-message">{{ error }}</p>
@@ -21,35 +26,64 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useAuthStore } from '../stores/auth'
+import { validatePassword } from '../utils/validation'
 
 export default {
   name: 'Register',
   setup() {
     const authStore = useAuthStore()
     const username = ref('')
+    const email = ref('')
     const password = ref('')
     const confirmPassword = ref('')
     const error = ref('')
+    const passwordError = ref('')
+
+    // Watch password for real-time validation
+    watch(password, (newPassword) => {
+      if (newPassword) {
+        const validation = validatePassword(newPassword)
+        if (!validation.isValid) {
+          passwordError.value = validation.errors.join(', ')
+        } else {
+          passwordError.value = ''
+        }
+      } else {
+        passwordError.value = ''
+      }
+    })
 
     const handleRegister = async () => {
       if (password.value !== confirmPassword.value) {
-        error.value = 'The two passwords entered do not match.'
+        error.value = 'The two passwords do not match'
         return
       }
-      error.value = ''
-      const success = await authStore.register(username.value, password.value)
-      if (!success) {
-        error.value = 'Registration failed, please try again later.'
+      
+      try {
+        error.value = ''
+        await authStore.register({
+           username: username.value,
+           email: email.value,
+           phone: '',
+           password: password.value,
+           age: null,
+           idCard: ''
+         })
+        // Registration successful, redirect or show success message
+      } catch (err) {
+        error.value = err.message
       }
     }
 
     return {
       username,
+      email,
       password,
       confirmPassword,
       error,
+      passwordError,
       handleRegister
     }
   }

@@ -6,7 +6,7 @@
         <p>Welcome back to Health Care Charity Organization</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="login-form-content">
+      <form @submit.prevent="handleLogin" class="login-form-content" novalidate>
         <!-- Username/Email input -->
         <div class="form-group">
           <label for="username">Username or Email</label>
@@ -18,7 +18,6 @@
             :class="{ 'error': errors.username }"
             @blur="validateField('username')"
             @input="clearError('username')"
-            required
           />
           <span v-if="errors.username" class="error-message">{{ errors.username }}</span>
         </div>
@@ -35,7 +34,6 @@
               :class="{ 'error': errors.password }"
               @blur="validateField('password')"
               @input="clearError('password')"
-              required
             />
             <button
               type="button"
@@ -138,7 +136,7 @@ const validateField = (field) => {
   switch (field) {
     case 'username':
       if (!value) {
-        errors.username = 'Please enter username or email'
+        errors.username = 'Username or email should not be empty'
       } else if (value.includes('@')) {
         // If contains @, validate as email
         if (!validateEmail(value)) {
@@ -160,11 +158,14 @@ const validateField = (field) => {
       
     case 'password':
       if (!value) {
-        errors.password = 'Please enter password'
-      } else if (value.length < 6) {
-        errors.password = 'Password must be at least 6 characters'
+        errors.password = 'Password should not be empty'
       } else {
-        errors.password = ''
+        const passwordValidation = validatePassword(value)
+        if (!passwordValidation.isValid) {
+          errors.password = passwordValidation.errors.join(', ')
+        } else {
+          errors.password = ''
+        }
       }
       break
   }
