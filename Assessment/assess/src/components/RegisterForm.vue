@@ -456,7 +456,7 @@ const handleRegister = async () => {
   
   // Rate limit check
   const clientId = 'register_' + (navigator.userAgent || 'unknown')
-  if (!checkRateLimit(clientId, 3, 600000)) { // 3次/10分钟
+  if (!checkRateLimit(clientId, 3, 600000)) { // 3 times per 10 minutes
     registerError.value = 'Registration attempts too frequent, please try again later'
     return
   }
@@ -770,7 +770,7 @@ watch(() => formData.password, () => {
   text-decoration: underline;
 }
 
-/* 图标样式 */
+/* Icon styles */
 .icon-eye::before {
   content: '👁';
 }
@@ -783,7 +783,7 @@ watch(() => formData.password, () => {
   content: '⚠️';
 }
 
-/* 响应式设计 */
+/* Responsive Design */
 @media (max-width: 768px) {
   .register-form {
     padding: 1rem;

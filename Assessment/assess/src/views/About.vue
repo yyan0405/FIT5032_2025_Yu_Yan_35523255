@@ -1,6 +1,6 @@
 <template>
   <div class="about-container">
-    <!-- 机构介绍 -->
+    <!-- Organization Introduction -->
     <section class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title">About Health Care Charity Organization</h1>
@@ -8,7 +8,7 @@
       </div>
     </section>
 
-    <!-- 使命愿景 -->
+    <!-- Mission and Vision -->
     <section class="mission-section">
       <div class="mission-grid">
         <div class="mission-item">
@@ -29,7 +29,7 @@
       </div>
     </section>
 
-    <!-- 服务对象 -->
+    <!-- Service Recipients -->
     <section class="target-groups-section">
       <h2 class="section-title">Our Target Groups</h2>
       <div class="groups-grid">
@@ -66,7 +66,7 @@
       </div>
     </section>
 
-    <!-- 发展历程 -->
+    <!-- Development History -->
     <section class="timeline-section">
       <h2 class="section-title">Development History</h2>
       <div class="timeline">
@@ -128,7 +128,7 @@
       </div>
     </section>
 
-    <!-- 团队介绍 -->
+    <!-- Team Introduction -->
     <section class="team-section">
       <h2 class="section-title">Our Team</h2>
       <div class="team-grid">
@@ -159,7 +159,7 @@
       </div>
     </section>
 
-    <!-- 联系我们 -->
+    <!-- Contact Us -->
     <section class="contact-section">
       <h2 class="section-title">Contact Us</h2>
       <div class="contact-grid">
@@ -190,7 +190,7 @@
       </div>
     </section>
 
-    <!-- 数据统计 -->
+    <!-- Data Statistics -->
     <section class="stats-section">
       <h2 class="section-title">Service Achievements</h2>
       <div class="stats-grid">
@@ -536,7 +536,7 @@ export default {
   opacity: 0.9;
 }
 
-/* 响应式设计 */
+/* Responsive Design */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2.5em;

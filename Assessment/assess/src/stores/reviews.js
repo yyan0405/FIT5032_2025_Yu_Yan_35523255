@@ -63,7 +63,7 @@ export const useReviewsStore = defineStore('reviews', {
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     },
     
-    // 获取特定服务的平均评分
+    // Get average rating for specific service
     getAverageRating: (state) => (serviceId) => {
       const serviceReviews = state.reviews.filter(review => 
         review.serviceId === serviceId && review.reportCount < 3
@@ -74,7 +74,7 @@ export const useReviewsStore = defineStore('reviews', {
       return Math.round((totalRating / serviceReviews.length) * 10) / 10
     },
     
-    // 获取特定服务的评价统计
+    // Get review statistics for specific service
     getReviewStats: (state) => (serviceId) => {
       const serviceReviews = state.reviews.filter(review => 
         review.serviceId === serviceId && review.reportCount < 3
@@ -98,7 +98,7 @@ export const useReviewsStore = defineStore('reviews', {
       return stats
     },
     
-    // 获取用户的评价
+    // Get user reviews
     getUserReviews: (state) => (userId) => {
       return state.reviews
         .filter(review => review.userId === userId)
@@ -114,7 +114,7 @@ export const useReviewsStore = defineStore('reviews', {
   },
   
   actions: {
-    // 提交评价
+    // Submit review
     async submitReview(reviewData) {
       try {
         this.loading = true
@@ -122,14 +122,14 @@ export const useReviewsStore = defineStore('reviews', {
         
         const authStore = useAuthStore()
         if (!authStore.isAuthenticated) {
-          throw new Error('请先登录后再评价')
+          throw new Error('Please login first to submit a review')
         }
         
         const { serviceId, rating, comment } = reviewData
         const userId = authStore.currentUser.id
         const username = authStore.currentUser.username
         
-        // 验证输入
+        // Validate input
         if (!validateRating(rating)) {
           throw new Error('Rating must be between 1-5')
         }
@@ -138,24 +138,24 @@ export const useReviewsStore = defineStore('reviews', {
           throw new Error('Review content does not meet requirements')
         }
         
-        // 检查是否已经评价过
+        // Check if user has already reviewed
         if (this.hasUserReviewed(serviceId, userId)) {
-          throw new Error('您已经评价过这个服务了')
+          throw new Error('You have already reviewed this service')
         }
         
-        // 检查评价频率限制
+        // Check review frequency limit
         const today = new Date().toDateString()
         const userKey = `${userId}_${today}`
         const todayReviews = this.userReviewLimits[userKey] || 0
         
         if (todayReviews >= 5) {
-          throw new Error('每天最多只能提交5个评价')
+          throw new Error('Maximum 5 reviews per day allowed')
         }
         
-        // 清理和防护输入内容
+        // Clean and sanitize input content
         const cleanComment = preventXSS(sanitizeContent(comment.trim()))
         
-        // 创建新评价
+        // Create new review
         const newReview = {
           id: this.reviews.length + 1,
           serviceId: parseInt(serviceId),
@@ -165,32 +165,32 @@ export const useReviewsStore = defineStore('reviews', {
           comment: cleanComment,
           createdAt: new Date(),
           updatedAt: new Date(),
-          isVerified: false, // 新评价需要验证
+          isVerified: false, // New reviews need verification
           helpfulCount: 0,
           reportCount: 0
         }
         
-        // 添加到评价列表
+        // Add to reviews list
         this.reviews.push(newReview)
         
-        // 更新用户评价限制
+        // Update user review limits
         this.userReviewLimits[userKey] = todayReviews + 1
         
-        // 在实际应用中，这里应该发送到后端API
-        console.log('新评价提交:', newReview)
+        // In real application, this should be sent to backend API
+        console.log('New review submitted:', newReview)
         
         return newReview
         
       } catch (error) {
         this.error = error.message
-        console.error('提交评价失败:', error)
+        console.error('Failed to submit review:', error)
         throw error
       } finally {
         this.loading = false
       }
     },
     
-    // 更新评价
+    // Update review
     async updateReview(reviewId, updateData) {
       try {
         this.loading = true
@@ -208,21 +208,21 @@ export const useReviewsStore = defineStore('reviews', {
         
         const review = this.reviews[reviewIndex]
         
-        // 检查权限
+        // Check permissions
         if (review.userId !== authStore.currentUser.id && !authStore.isAdmin) {
           throw new Error('No permission to modify this review')
         }
         
-        // 验证更新数据
+        // Validate update data
         if (updateData.rating && !validateRating(updateData.rating)) {
-          throw new Error('评分必须在1-5之间')
+          throw new Error('Rating must be between 1-5')
         }
         
         if (updateData.comment && !validateComment(updateData.comment)) {
-          throw new Error('评论内容不符合要求')
+          throw new Error('Comment content does not meet requirements')
         }
         
-        // 更新评价
+        // Update review
         const updatedReview = {
           ...review,
           ...updateData,
@@ -231,7 +231,7 @@ export const useReviewsStore = defineStore('reviews', {
         
         if (updateData.comment) {
           updatedReview.comment = preventXSS(sanitizeContent(updateData.comment.trim()))
-          updatedReview.isVerified = false // 重新验证
+          updatedReview.isVerified = false // Re-verify
         }
         
         this.reviews[reviewIndex] = updatedReview
@@ -247,7 +247,7 @@ export const useReviewsStore = defineStore('reviews', {
       }
     },
     
-    // 删除评价
+    // Delete review
     async deleteReview(reviewId) {
       try {
         this.loading = true
@@ -255,7 +255,7 @@ export const useReviewsStore = defineStore('reviews', {
         
         const authStore = useAuthStore()
         if (!authStore.isAuthenticated) {
-          throw new Error('请先登录')
+          throw new Error('Please login first')
         }
         
         const reviewIndex = this.reviews.findIndex(r => r.id === reviewId)
@@ -265,67 +265,67 @@ export const useReviewsStore = defineStore('reviews', {
         
         const review = this.reviews[reviewIndex]
         
-        // 检查权限
+        // Check permissions
         if (review.userId !== authStore.currentUser.id && !authStore.isAdmin) {
-          throw new Error('没有权限删除此评价')
+          throw new Error('No permission to delete this review')
         }
         
-        // 删除评价
+        // Delete review
         this.reviews.splice(reviewIndex, 1)
         
         return true
         
       } catch (error) {
         this.error = error.message
-        console.error('删除评价失败:', error)
+        console.error('Failed to delete review:', error)
         throw error
       } finally {
         this.loading = false
       }
     },
     
-    // 标记评价为有用
+    // Mark review as helpful
     async markReviewHelpful(reviewId) {
       try {
         const authStore = useAuthStore()
         if (!authStore.isAuthenticated) {
-          throw new Error('请先登录')
+          throw new Error('Please login first')
         }
         
         const reviewIndex = this.reviews.findIndex(r => r.id === reviewId)
         if (reviewIndex === -1) {
-          throw new Error('评价不存在')
+          throw new Error('Review does not exist')
         }
         
-        // 增加有用计数
+        // Increase helpful count
         this.reviews[reviewIndex].helpfulCount++
         
         return true
         
       } catch (error) {
         this.error = error.message
-        console.error('标记评价失败:', error)
+        console.error('Failed to mark review:', error)
         throw error
       }
     },
     
-    // 举报评价
+    // Report review
     async reportReview(reviewId, reason) {
       try {
         const authStore = useAuthStore()
         if (!authStore.isAuthenticated) {
-          throw new Error('请先登录')
+          throw new Error('Please login first')
         }
         
         const reviewIndex = this.reviews.findIndex(r => r.id === reviewId)
         if (reviewIndex === -1) {
-          throw new Error('评价不存在')
+          throw new Error('Review does not exist')
         }
         
-        // 增加举报计数
+        // Increase report count
         this.reviews[reviewIndex].reportCount++
         
-        // 记录举报信息
+        // Record report information
         const report = {
           id: this.reportedReviews.length + 1,
           reviewId,
@@ -337,16 +337,16 @@ export const useReviewsStore = defineStore('reviews', {
         
         this.reportedReviews.push(report)
         
-        // 如果举报次数过多，自动隐藏评价
+        // Auto-hide review if reported too many times
         if (this.reviews[reviewIndex].reportCount >= 3) {
-          console.log(`评价 ${reviewId} 因举报过多被自动隐藏`)
+          console.log(`Review ${reviewId} auto-hidden due to excessive reports`)
         }
         
         return true
         
       } catch (error) {
         this.error = error.message
-        console.error('举报评价失败:', error)
+        console.error('Failed to report review:', error)
         throw error
       }
     },
@@ -361,7 +361,7 @@ export const useReviewsStore = defineStore('reviews', {
         
         const reviewIndex = this.reviews.findIndex(r => r.id === reviewId)
         if (reviewIndex === -1) {
-          throw new Error('评价不存在')
+          throw new Error('Review does not exist')
         }
         
         this.reviews[reviewIndex].isVerified = isVerified

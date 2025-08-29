@@ -441,7 +441,7 @@ export const useServicesStore = defineStore('services', {
         
         const serviceIndex = this.services.findIndex(s => s.id === serviceId)
         if (serviceIndex === -1) {
-          throw new Error('服务不存在')
+          throw new Error('Service not found')
         }
         
         // Soft delete: set to inactive

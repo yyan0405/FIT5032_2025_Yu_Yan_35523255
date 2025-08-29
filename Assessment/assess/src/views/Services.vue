@@ -5,7 +5,7 @@
       <p class="hero-description">Providing comprehensive health support services for vulnerable groups</p>
     </div>
 
-    <!-- 服务分类筛选 -->
+    <!-- Service Category Filter -->
     <div class="filter-section">
       <h2>Service Categories</h2>
       <div class="filter-buttons">
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <!-- 搜索功能 -->
+    <!-- Search Function -->
     <div class="search-section">
       <div class="search-box">
         <input 
@@ -45,7 +45,7 @@
     
     <div v-if="error" class="error-message">{{ error }}</div>
 
-    <!-- 服务列表 -->
+    <!-- Service List -->
     <div v-if="!loading && !error" class="services-grid">
       <ServiceCard 
         v-for="service in filteredServices" 
@@ -58,7 +58,7 @@
       <p>No services found matching the criteria</p>
     </div>
 
-    <!-- 服务统计 -->
+    <!-- Service Statistics -->
     <div class="stats-section">
       <h2>Service Statistics</h2>
       <div class="stats-grid">
@@ -424,7 +424,7 @@ export default {
   font-size: 1.1em;
 }
 
-/* 响应式设计 */
+/* Responsive Design */
 @media (max-width: 768px) {
   .services-container {
     padding: 15px;

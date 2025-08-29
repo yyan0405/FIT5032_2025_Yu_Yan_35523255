@@ -7,6 +7,9 @@
           <router-link to="/" class="nav-link" @click="closeMenu">Home</router-link>
           <router-link to="/services" class="nav-link" @click="closeMenu">Services</router-link>
           <router-link to="/about" class="nav-link" @click="closeMenu">About</router-link>
+          <router-link v-if="isAuthenticated" to="/email" class="nav-link" @click="closeMenu">Email</router-link>
+          <router-link v-if="isAuthenticated" to="/users" class="nav-link" @click="closeMenu">User Management</router-link>
+          <router-link v-if="isAuthenticated" to="/records" class="nav-link" @click="closeMenu">Service Records</router-link>
           <router-link v-if="!isAuthenticated" to="/login" class="nav-link" @click="closeMenu">Login</router-link>
           <router-link v-if="!isAuthenticated" to="/register" class="nav-link" @click="closeMenu">Register</router-link>
           <router-link v-if="isAdmin" to="/admin" class="nav-link" @click="closeMenu">Admin Panel</router-link>

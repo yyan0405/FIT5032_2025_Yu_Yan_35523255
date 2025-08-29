@@ -61,17 +61,23 @@ export default {
         return
       }
       
+      // Check password validation
+      const validation = validatePassword(password.value)
+      if (!validation.isValid) {
+        error.value = validation.errors.join(', ')
+        return
+      }
+      
       try {
         error.value = ''
         await authStore.register({
            username: username.value,
            email: email.value,
-           phone: '',
-           password: password.value,
-           age: null,
-           idCard: ''
+           password: password.value
          })
-        // Registration successful, redirect or show success message
+        // Registration successful, redirect to login
+        alert('Registration successful! Please login with your new account.')
+        // You can redirect to login page here if needed
       } catch (err) {
         error.value = err.message
       }

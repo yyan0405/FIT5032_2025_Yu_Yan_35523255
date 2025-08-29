@@ -3,8 +3,8 @@
     <h2>Login</h2>
     <form @submit.prevent="handleLogin" class="login-form">
       <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" v-model="email" required>
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
@@ -24,20 +24,21 @@ export default {
   name: 'Login',
   setup() {
     const authStore = useAuthStore()
-    const username = ref('')
+    const email = ref('')
     const password = ref('')
     const error = ref('')
 
     const handleLogin = async () => {
-      error.value = ''
-      const success = await authStore.login(username.value, password.value)
-      if (!success) {
-        error.value = 'Incorrect username or password.'
+      try {
+        error.value = ''
+        await authStore.login(email.value, password.value)
+      } catch (err) {
+        error.value = err.message || 'Login failed. Please try again.'
       }
     }
 
     return {
-      username,
+      email,
       password,
       error,
       handleLogin

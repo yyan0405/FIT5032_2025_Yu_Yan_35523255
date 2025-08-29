@@ -35,11 +35,11 @@
         </div>
       </div>
 
-      <!-- 评价系统 -->
+      <!-- Rating System -->
       <div class="reviews-section">
         <h2>User Reviews</h2>
         
-        <!-- 添加评价表单 -->
+        <!-- Add Rating Form -->
         <div v-if="isAuthenticated" class="add-review">
           <h3>Add Your Review</h3>
           <form @submit.prevent="submitReview">
@@ -75,7 +75,7 @@
           <p>Please <router-link to="/login">login</router-link> to add a review</p>
         </div>
 
-        <!-- 评价列表 -->
+        <!-- Rating List -->
         <div class="reviews-list">
           <div v-for="review in reviews" :key="review.id" class="review-item">
             <div class="review-header">
@@ -515,7 +515,7 @@ export default {
   line-height: 1.5;
 }
 
-/* 响应式设计 */
+/* Responsive Design */
 @media (max-width: 768px) {
   .service-header {
     grid-template-columns: 1fr;

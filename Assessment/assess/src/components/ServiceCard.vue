@@ -129,7 +129,7 @@ export default {
   background-color: #369870;
 }
 
-/* 响应式设计 */
+/* Responsive Design */
 @media (max-width: 768px) {
   .service-card {
     max-width: 100%;

@@ -6,6 +6,9 @@ import ServiceDetail from '../views/ServiceDetail.vue'
 import Services from '../views/Services.vue'
 import About from '../views/About.vue'
 import Admin from '../views/Admin.vue'
+import EmailSender from '../views/EmailSender.vue'
+import UserManagement from '../views/UserManagement.vue'
+import ServiceRecords from '../views/ServiceRecords.vue'
 import { useAuthStore } from '../stores/auth'
 
 const routes = [
@@ -45,7 +48,25 @@ const routes = [
     name: 'Admin',
     component: Admin,
     meta: { requiresAuth: true, requiresAdmin: true }
-  }
+  },
+  {
+      path: '/email',
+      name: 'EmailSender',
+      component: EmailSender,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/users',
+      name: 'UserManagement',
+      component: UserManagement,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/records',
+      name: 'ServiceRecords',
+      component: ServiceRecords,
+      meta: { requiresAuth: true }
+    }
 ]
 
 const router = createRouter({

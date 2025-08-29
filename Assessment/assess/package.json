@@ -1,7 +1,8 @@
 {
-  "name": "assess",
+  "name": "health-charity-services",
   "version": "0.0.0",
   "private": true,
+  "description": "A modern web application for health charity organization providing services to vulnerable communities",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,8 +21,10 @@
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
     "express-validator": "^7.2.1",
+    "firebase": "^12.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.5",
     "pinia": "^3.0.3",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
@@ -37,6 +40,7 @@
     "npm-run-all2": "^8.0.4",
     "oxlint": "~1.1.0",
     "prettier": "3.5.3",
+    "terser": "^5.43.1",
     "vite": "^7.0.0",
     "vite-plugin-vue-devtools": "^7.7.7"
   }

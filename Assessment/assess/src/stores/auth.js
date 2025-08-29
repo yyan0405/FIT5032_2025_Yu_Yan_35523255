@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import router from '../router'
 import { hashPassword, generateSalt, sanitizeContent } from '@/utils/security'
 import { validateEmail, validateUsername } from '@/utils/validation'
+import { registerUser, loginUser, logoutUser, onAuthStateChange, getCurrentUser } from '@/firebase/auth'
 
 // Mock user database
 const mockUsers = [
@@ -83,66 +84,38 @@ export const useAuthStore = defineStore('auth', {
       this.updateActivity()
     },
     
-    // Login functionality
-    async login(credentials) {
+    // Login functionality with Firebase Auth
+    async login(email, password, rememberMe = false) {
       try {
-        const { username, password, rememberMe } = credentials
-        
         // Input validation and sanitization
-        const cleanUsername = sanitizeContent(username.trim())
+        const cleanEmail = sanitizeContent(email.trim())
         const cleanPassword = password.trim()
         
-        if (!cleanUsername || !cleanPassword) {
-          throw new Error('Username and password cannot be empty')
+        if (!cleanEmail || !cleanPassword) {
+          throw new Error('Email and password cannot be empty')
         }
         
-        // Check login attempt count
-        const attemptKey = cleanUsername.toLowerCase()
-        const attempts = this.loginAttempts[attemptKey] || { count: 0, lastAttempt: 0 }
-        const now = Date.now()
+        // Use Firebase Auth for login
+        const result = await loginUser(cleanEmail, cleanPassword)
         
-        // Lock if more than 5 failed attempts within 15 minutes
-        if (attempts.count >= 5 && (now - attempts.lastAttempt) < 15 * 60 * 1000) {
-          throw new Error('Too many login attempts, please try again in 15 minutes')
+        if (!result.success) {
+          throw new Error(result.error)
         }
-        
-        // Reset counter (if more than 15 minutes have passed)
-        if ((now - attempts.lastAttempt) >= 15 * 60 * 1000) {
-          attempts.count = 0
-        }
-        
-        // Find user
-        const user = this.users.find(u => 
-          (u.username.toLowerCase() === cleanUsername.toLowerCase() || 
-           u.email.toLowerCase() === cleanUsername.toLowerCase()) &&
-          u.isActive
-        )
-        
-        if (!user || user.password !== cleanPassword) {
-          // Record failed attempt
-          attempts.count++
-          attempts.lastAttempt = now
-          this.loginAttempts[attemptKey] = attempts
-          localStorage.setItem('loginAttempts', JSON.stringify(this.loginAttempts))
-          
-          throw new Error('Incorrect username or password')
-        }
-        
-        // Login successful, clear failure records
-        delete this.loginAttempts[attemptKey]
-        localStorage.setItem('loginAttempts', JSON.stringify(this.loginAttempts))
         
         // Set user status
         this.isAuthenticated = true
-        this.isAdmin = user.role === 'admin'
-        this.isVolunteer = user.role === 'volunteer'
+        
+        // Check if user is admin (you can customize this logic)
+        const isAdminEmail = cleanEmail === 'admin@healthcharity.org'
+        const isVolunteerEmail = cleanEmail === 'volunteer@healthcharity.org'
+        
+        this.isAdmin = isAdminEmail
+        this.isVolunteer = isVolunteerEmail
         this.currentUser = {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          phone: user.phone,
-          createdAt: user.createdAt
+          uid: result.user.uid,
+          email: result.user.email,
+          displayName: result.user.displayName || 'User',
+          role: isAdminEmail ? 'admin' : (isVolunteerEmail ? 'volunteer' : 'user')
         }
         
         // Save to local storage
@@ -155,7 +128,7 @@ export const useAuthStore = defineStore('auth', {
         this.updateActivity()
         
         // Redirect based on role
-        const redirectPath = user.role === 'admin' ? '/admin' : '/'
+        const redirectPath = this.isAdmin ? '/admin' : '/'
         if (!router.currentRoute.value.query.redirect) {
           await router.push(redirectPath)
         }
@@ -168,10 +141,10 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
-    // Registration functionality
+    // Registration functionality with Firebase Auth
     async register(userData) {
       try {
-        const { username, email, phone, password, age, idCard } = userData
+        const { username, email, password } = userData
         
         // Input validation
         const usernameValidation = validateUsername(username)
@@ -184,35 +157,14 @@ export const useAuthStore = defineStore('auth', {
           throw new Error(emailValidation.errors.join(', '))
         }
         
-        // Check if username and email already exist
-        const existingUser = this.users.find(u => 
-          u.username.toLowerCase() === username.toLowerCase() || 
-          u.email.toLowerCase() === email.toLowerCase()
-        )
+        // Use Firebase Auth for registration
+        const result = await registerUser(email, password, username)
         
-        if (existingUser) {
-          throw new Error('Username or email already exists')
+        if (!result.success) {
+          throw new Error(result.error)
         }
         
-        // Create new user
-        const newUser = {
-          id: this.users.length + 1,
-          username: sanitizeContent(username.trim()),
-          email: sanitizeContent(email.trim()),
-          phone: sanitizeContent(phone.trim()),
-          password: password.trim(), // Should be hashed in real applications
-          role: 'user', // Default role
-          age: age || null,
-          idCard: idCard ? sanitizeContent(idCard.trim()) : '',
-          createdAt: new Date(),
-          isActive: true
-        }
-        
-        // Add to user list
-        this.users.push(newUser)
-        
-        // In real applications, this should be sent to backend API
-        console.log('New user registered:', newUser)
+        console.log('New user registered with Firebase:', result.user)
         
         return true
         
@@ -222,26 +174,33 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
-    // Logout functionality
-    logout() {
-      this.isAuthenticated = false
-      this.isAdmin = false
-      this.isVolunteer = false
-      this.currentUser = null
-      
-      // Clear all storage
-      localStorage.removeItem('isAuthenticated')
-      localStorage.removeItem('isAdmin')
-      localStorage.removeItem('isVolunteer')
-      localStorage.removeItem('currentUser')
-      localStorage.removeItem('lastActivity')
-      
-      sessionStorage.removeItem('isAuthenticated')
-      sessionStorage.removeItem('isAdmin')
-      sessionStorage.removeItem('isVolunteer')
-      sessionStorage.removeItem('currentUser')
-      
-      router.push('/login')
+    // Logout functionality with Firebase Auth
+    async logout() {
+      try {
+        // Use Firebase Auth for logout
+        await logoutUser()
+        
+        this.isAuthenticated = false
+        this.isAdmin = false
+        this.isVolunteer = false
+        this.currentUser = null
+        
+        // Clear all storage
+        localStorage.removeItem('isAuthenticated')
+        localStorage.removeItem('isAdmin')
+        localStorage.removeItem('isVolunteer')
+        localStorage.removeItem('currentUser')
+        localStorage.removeItem('lastActivity')
+        
+        sessionStorage.removeItem('isAuthenticated')
+        sessionStorage.removeItem('isAdmin')
+        sessionStorage.removeItem('isVolunteer')
+        sessionStorage.removeItem('currentUser')
+        
+        router.push('/login')
+      } catch (error) {
+        console.error('Logout failed:', error)
+      }
     },
     
     // Update user information
@@ -287,19 +246,55 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
-    // Initialize authentication state
+    // Initialize authentication state with Firebase Auth
     initAuth() {
+      // Set up Firebase auth state listener
+      onAuthStateChange((user) => {
+        if (user) {
+          // User is signed in
+          this.isAuthenticated = true
+          
+          // Check if user is admin (customize this logic as needed)
+          const isAdminEmail = user.email === 'admin@healthcharity.org'
+          const isVolunteerEmail = user.email === 'volunteer@healthcharity.org'
+          
+          this.isAdmin = isAdminEmail
+          this.isVolunteer = isVolunteerEmail
+          this.currentUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName || 'User',
+            role: isAdminEmail ? 'admin' : (isVolunteerEmail ? 'volunteer' : 'user')
+          }
+          
+          // Save to localStorage
+          localStorage.setItem('isAuthenticated', 'true')
+          localStorage.setItem('isAdmin', this.isAdmin.toString())
+          localStorage.setItem('isVolunteer', this.isVolunteer.toString())
+          localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
+          
+          this.updateActivity()
+        } else {
+          // User is signed out
+          this.isAuthenticated = false
+          this.isAdmin = false
+          this.isVolunteer = false
+          this.currentUser = null
+          
+          // Clear storage
+          localStorage.removeItem('isAuthenticated')
+          localStorage.removeItem('isAdmin')
+          localStorage.removeItem('isVolunteer')
+          localStorage.removeItem('currentUser')
+        }
+      })
+      
+      // Also check localStorage for existing session
       const isAuth = localStorage.getItem('isAuthenticated') || sessionStorage.getItem('isAuthenticated')
-      const isAdm = localStorage.getItem('isAdmin') || sessionStorage.getItem('isAdmin')
-      const isVol = localStorage.getItem('isVolunteer') || sessionStorage.getItem('isVolunteer')
       const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser')
       const lastAct = localStorage.getItem('lastActivity')
       
       if (isAuth === 'true' && user) {
-        this.isAuthenticated = true
-        this.isAdmin = isAdm === 'true'
-        this.isVolunteer = isVol === 'true'
-        this.currentUser = JSON.parse(user)
         this.lastActivity = lastAct ? parseInt(lastAct) : Date.now()
         
         // Check if session has expired

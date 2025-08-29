@@ -1,29 +1,31 @@
 <template>
   <div class="admin-panel">
     <h1 class="page-title">Admin Panel</h1>
-    <p class="page-description">Manage movies and user information here.</p>
+    <p class="page-description">Manage health services and user information here.</p>
 
-    <!-- Movie Management -->
+    <!-- Health Services Management -->
     <div class="management-section">
-      <h2>Movie Management</h2>
-      <button @click="showAddMovieModal = true" class="add-btn">Add New Movie</button>
+      <h2>Health Services Management</h2>
+      <button @click="showAddServiceModal = true" class="add-btn">Add New Service</button>
       <table class="data-table">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Title</th>
-            <th>Genre</th>
+            <th>Service Name</th>
+            <th>Category</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="movie in movies" :key="movie.id">
-            <td>{{ movie.id }}</td>
-            <td>{{ movie.title }}</td>
-            <td>{{ movie.genre }}</td>
+          <tr v-for="service in services" :key="service.id">
+            <td>{{ service.id }}</td>
+            <td>{{ service.title }}</td>
+            <td>{{ service.category }}</td>
+            <td>{{ service.status }}</td>
             <td>
-              <button @click="editMovie(movie)" class="edit-btn">Edit</button>
-              <button @click="deleteMovie(movie.id)" class="delete-btn">Delete</button>
+              <button @click="editService(service)" class="edit-btn">Edit</button>
+              <button @click="deleteService(service.id)" class="delete-btn">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -65,27 +67,30 @@ import { ref, onMounted } from 'vue'
 export default {
   name: 'Admin',
   setup() {
-    const movies = ref([])
+    const services = ref([])
     const users = ref([])
+    const showAddServiceModal = ref(false)
 
     // Simulate data loading
     onMounted(() => {
-      movies.value = [
-        { id: 1, title: 'Movie A', genre: 'Sci-Fi' },
-        { id: 2, title: 'Movie B', genre: 'Comedy' },
+      services.value = [
+        { id: 1, title: 'Mental Health Counseling', category: 'Mental Health', status: 'Active' },
+        { id: 2, title: 'Community Health Education', category: 'Health Education', status: 'Active' },
+        { id: 3, title: 'Elderly Care Support', category: 'Elderly Care', status: 'Active' },
       ];
       users.value = [
         { id: 1, username: 'admin', role: 'admin' },
-        { id: 2, username: 'user', role: 'user' },
+        { id: 2, username: 'volunteer1', role: 'volunteer' },
+        { id: 3, username: 'user1', role: 'user' },
       ];
     });
 
-    const editMovie = (movie) => alert(`Edit movie: ${movie.title}`);
-    const deleteMovie = (id) => alert(`Delete movie ID: ${id}`);
+    const editService = (service) => alert(`Edit service: ${service.title}`);
+    const deleteService = (id) => alert(`Delete service ID: ${id}`);
     const editUser = (user) => alert(`Edit user: ${user.username}`);
     const deleteUser = (id) => alert(`Delete user ID: ${id}`);
 
-    return { movies, users, editMovie, deleteMovie, editUser, deleteUser };
+    return { services, users, showAddServiceModal, editService, deleteService, editUser, deleteUser };
   }
 }
 </script>
