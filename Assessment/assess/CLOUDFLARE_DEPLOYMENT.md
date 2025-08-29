@@ -1,128 +1,97 @@
 # Cloudflare Pages Deployment Guide
 
+## Overview
+This guide provides step-by-step instructions for deploying the Health Charity Services application to Cloudflare Pages.
+
 ## Prerequisites
+- GitHub repository with your project code
+- Cloudflare account
+- Firebase project configured
 
-1. A Cloudflare account
-2. Your project code pushed to a Git repository (GitHub, GitLab, or Bitbucket)
-3. Firebase project configured for production
+## Deployment Steps
 
-## Step 1: Prepare Your Repository
-
-1. Ensure all code is committed and pushed to your Git repository
-2. Make sure the following files are in your project:
-   - `_redirects` file in the `public` folder (already created)
-   - `.env.production` with environment variable templates (already created)
-   - Updated `vite.config.js` with production optimizations (already configured)
-
-### Important: Project Structure Consideration
-
-Your project structure looks like this:
-```
-Your-Repository/
-├── Assessment/
-│   ├── assess/          # ← Your Vue.js project is here
-│   │   ├── package.json
-│   │   ├── src/
-│   │   └── ...
-│   └── other files
-└── ...
-```
-
-**Critical**: Since your Vue.js project is inside the `Assessment/assess` folder, you MUST set the root directory to `/Assessment/assess` in Cloudflare Pages configuration.
-
-## Step 2: Create Cloudflare Pages Project
-
+### 1. Connect GitHub Repository
 1. Log in to your Cloudflare dashboard
-2. Go to "Pages" in the sidebar
+2. Go to Pages section
 3. Click "Create a project"
-4. Choose "Connect to Git"
-5. Select your Git provider and authorize Cloudflare
-6. Choose your repository
+4. Connect your GitHub account
+5. Select the repository: `FIT5032_2025_Yu_Yan_35523255`
 
-## Step 3: Configure Build Settings
-
-### Build Configuration:
+### 2. Configure Build Settings
 - **Framework preset**: Vue
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
-- **Root directory**: `/Assessment/assess` (IMPORTANT: This points to the Assessment/assess folder containing your Vue.js project)
+- **Root directory**: `assess`
 
-### Environment Variables:
-Add the following environment variables in Cloudflare Pages settings:
+### 3. Environment Variables Configuration
+In Cloudflare Pages dashboard, go to Settings > Environment variables and add:
 
 ```
-VITE_FIREBASE_API_KEY=your_production_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-VITE_EMAIL_SERVICE_URL=your_production_email_service_url
+VITE_FIREBASE_API_KEY=AIzaSyAcv1e-JHSWOGeIrzS6VIhTpMFrzlJ0ndQ
+VITE_FIREBASE_AUTH_DOMAIN=fit5032-a3-83d8a.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=fit5032-a3-83d8a
+VITE_FIREBASE_STORAGE_BUCKET=fit5032-a3-83d8a.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=499392313564
+VITE_FIREBASE_APP_ID=1:499392313564:web:87e65ebeb6ed9e99c81c19
+VITE_EMAIL_SERVICE_URL=https://your-backend-service.herokuapp.com
 ```
 
-## Step 4: Deploy
-
+### 4. Deploy
 1. Click "Save and Deploy"
-2. Cloudflare will automatically build and deploy your project
-3. Once deployed, you'll get a URL like `https://your-project.pages.dev`
-
-## Step 5: Configure Custom Domain (Optional)
-
-1. In your Cloudflare Pages project, go to "Custom domains"
-2. Add your custom domain
-3. Update your DNS settings as instructed
-
-## Step 6: Set up Firebase for Production
-
-1. In your Firebase console, add your Cloudflare Pages domain to authorized domains:
-   - Go to Authentication > Settings > Authorized domains
-   - Add your `*.pages.dev` domain or custom domain
-
-2. Update Firebase security rules if needed for production
-
-## Automatic Deployments
-
-Cloudflare Pages will automatically redeploy your site whenever you push changes to your connected Git repository.
+2. Wait for the build to complete
+3. Your site will be available at `https://your-project.pages.dev`
 
 ## Troubleshooting
 
-### Common Issues:
+### Connection Reset Error (ERR_CONNECTION_RESET)
+If you see a connection reset error when accessing the deployed site:
 
-1. **Build fails with "package.json not found"**: 
-   - Verify Root directory is set to `/Assessment/assess`
-   - Check that your repository contains the `Assessment/assess` folder structure
-   
-2. **404 errors on page refresh**: Make sure the `_redirects` file is in the `public` folder
+1. **Check Environment Variables**: Ensure all Firebase configuration variables are correctly set in Cloudflare Pages dashboard
+2. **Verify Firebase Configuration**: Make sure your Firebase project allows the Cloudflare Pages domain
+3. **Check Build Logs**: Review the deployment logs for any build errors
+4. **Clear Cache**: Try accessing the site in incognito mode or clear browser cache
 
-3. **Firebase connection issues**: Verify all environment variables are set correctly
+### Firebase Authentication Issues
+1. Add your Cloudflare Pages domain to Firebase Authentication authorized domains:
+   - Go to Firebase Console > Authentication > Settings > Authorized domains
+   - Add your `*.pages.dev` domain
 
-4. **Build failures**: Check the build logs in Cloudflare Pages dashboard
+### Email Service Issues
+1. Deploy your backend service to a hosting platform (Heroku, Railway, etc.)
+2. Update `VITE_EMAIL_SERVICE_URL` with the actual backend URL
+3. Ensure CORS is properly configured in your backend
 
-5. **Wrong project structure deployed**:
-   - Ensure Root directory is `/Assessment/assess`, not `/` or `/Assessment`
-   - The build system should find `package.json` in the Assessment/assess folder
+## Post-Deployment Checklist
+- [ ] Site loads without errors
+- [ ] Firebase authentication works
+- [ ] All pages are accessible
+- [ ] Email functionality works (if backend is deployed)
+- [ ] Responsive design works on mobile devices
 
-### Build Optimization:
+## Custom Domain (Optional)
+1. Go to Custom domains in Cloudflare Pages
+2. Add your domain
+3. Update DNS records as instructed
+4. Add the custom domain to Firebase authorized domains
 
-The project is already configured with:
-- Code splitting for better performance
-- Terser minification
-- Optimized chunk splitting for vendor libraries
-- ES2015 target for broad browser compatibility
+## Monitoring and Analytics
+- Use Cloudflare Analytics to monitor site performance
+- Set up Firebase Analytics for user behavior tracking
+- Monitor error logs in Cloudflare dashboard
 
-## Security Considerations
+## Additional Notes
 
-1. Never commit sensitive keys to your repository
-2. Use environment variables for all configuration
-3. Regularly update dependencies
-4. Configure proper Firebase security rules
+### Important Reminders
+1. Always test your application locally before deploying
+2. Keep your Firebase API keys secure
+3. Regularly update dependencies for security
+4. Make sure the root directory is set to `assess` in Cloudflare Pages
+5. Verify all environment variables are configured in Cloudflare dashboard
 
-## Performance Optimization
-
-The build configuration includes:
-- Automatic code splitting
-- Vendor chunk separation
-- Firebase libraries in separate chunks
-- Minification and compression
-
-Your site should achieve excellent performance scores on Cloudflare's global CDN.
+### Quick Fix for Connection Reset Error
+If you're experiencing connection reset errors:
+1. Go to Cloudflare Pages dashboard
+2. Navigate to Settings > Environment variables
+3. Add all the Firebase configuration variables listed above
+4. Redeploy the project
+5. Add your Cloudflare Pages domain to Firebase authorized domains
