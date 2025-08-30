@@ -14,6 +14,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
@@ -24,9 +25,13 @@
     "firebase": "^12.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "leaflet": "^1.9.4",
+    "leaflet-control-geocoder": "^3.3.0",
+    "leaflet-routing-machine": "^3.2.12",
     "nodemailer": "^7.0.5",
     "pinia": "^3.0.3",
     "vue": "^3.5.17",
+    "vue-leaflet": "^0.1.0",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {

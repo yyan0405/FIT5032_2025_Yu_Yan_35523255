@@ -20,7 +20,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Route configuration
 const emailRoutes = require('./routes/email');
+const exportRoutes = require('./routes/export');
 app.use('/api/email', emailRoutes);
+app.use('/api/export', exportRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -50,7 +52,7 @@ app.get('/', (req, res) => {
 });
 
 // 404处理
-app.use('*', (req, res) => {
+app.all('*', (req, res) => {
   res.status(404).json({
     success: false,
     message: 'API endpoint not found',

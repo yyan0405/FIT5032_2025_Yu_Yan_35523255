@@ -6,6 +6,7 @@
         <div class="nav-menu" :class="{ 'active': isMenuOpen }">
           <router-link to="/" class="nav-link" @click="closeMenu">Home</router-link>
           <router-link to="/services" class="nav-link" @click="closeMenu">Services</router-link>
+          <router-link to="/map" class="nav-link" @click="closeMenu">Map</router-link>
           <router-link to="/about" class="nav-link" @click="closeMenu">About</router-link>
           <router-link v-if="isAuthenticated" to="/email" class="nav-link" @click="closeMenu">Email</router-link>
           <router-link v-if="isAuthenticated" to="/users" class="nav-link" @click="closeMenu">User Management</router-link>

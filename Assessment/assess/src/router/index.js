@@ -9,6 +9,7 @@ import Admin from '../views/Admin.vue'
 import EmailSender from '../views/EmailSender.vue'
 import UserManagement from '../views/UserManagement.vue'
 import ServiceRecords from '../views/ServiceRecords.vue'
+import Map from '../views/Map.vue'
 import { useAuthStore } from '../stores/auth'
 
 const routes = [
@@ -42,6 +43,11 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/map',
+    name: 'Map',
+    component: Map
   },
   {
     path: '/admin',
